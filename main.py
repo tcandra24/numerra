@@ -1,11 +1,12 @@
+import argparse
+
 from utilities.input_handler import input_menu, loop_validation_input
 from core.operations import execute_operation
 from core.errors import CalculatorError
 from core.history import History
 from enums.menu import Menu
-        
-def main():
-    histories = History()
+
+def menu_mode(histories):
 
     while True:
         try:
@@ -35,6 +36,50 @@ Choose Menu:
             print(f"Hasilnya yaitu : {result}")
         except CalculatorError as e:
             print(f"Error : {e}")
+
+def interactive_mode(args, parser, histories):
+    if args.add:
+        menu = Menu.ADD
+    elif args.sub:
+        menu = Menu.SUB
+    elif args.multiply:
+        menu = Menu.MUL
+    elif args.division:
+        menu = Menu.DIV
+    else: 
+        parser.print_help()
+        return
+
+    value_1 = args.value1 if args.value1 is not None else loop_validation_input("Masukan Angka Pertama : ")
+    value_2 = args.value2 if args.value2 is not None else loop_validation_input("Masukan Angka Kedua : ")
+
+    result = execute_operation(menu, value_1, value_2, histories)
+    print(f"Hasilnya yaitu : {result}")
+        
+def main():
+    parser = argparse.ArgumentParser(description="Python Calculator Project")
+    parser.add_argument("--version", action="version", version="Python Calculator Project 1.0")
+    parser.add_argument("--menu", action="store_true", help="Menu Mode for Calculator")
+
+    parser.add_argument("--add", action="store_true", help="Choose add mode for Calculator")
+    parser.add_argument("--sub", action="store_true", help="Choose sub mode for Calculator")
+    parser.add_argument("--multiply", action="store_true", help="Choose multiply mode for Calculator")
+    parser.add_argument("--division", action="store_true", help="Choose division mode for Calculator")
+
+    parser.add_argument("value1", type=int, nargs="?", help="First value for calculation")
+    parser.add_argument("value2", type=int, nargs="?", help="Second value for calculation")
+
+
+    args = parser.parse_args()
+
+    histories = History()
+
+    if args.menu:
+        menu_mode(histories)
+    else:
+        interactive_mode(args, parser, histories)
+
+    
         
 
 if __name__ == "__main__":
