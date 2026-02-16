@@ -17,7 +17,8 @@ Choose Menu:
     3. Perkalian
     4. Pembagian
     5. History
-    6. Keluar
+    6. Hapus History
+    7. Keluar
             """)
             menu = input_menu()
 
@@ -27,6 +28,11 @@ Choose Menu:
 
             if menu == Menu.HISTORY:
                 histories.show()
+                continue
+
+            if menu == Menu.CLEAR:
+                histories.clear()
+                print("History berhasil dihapus!")
                 continue
             
             value_1 = loop_validation_input("Masukan Angka Pertama : ")
@@ -46,6 +52,13 @@ def interactive_mode(args, parser, histories):
         menu = Menu.MUL
     elif args.division:
         menu = Menu.DIV
+    elif args.histories:
+        histories.show()
+        return
+    elif args.clear:
+        histories.clear()
+        print("History berhasil dihapus!")
+        return
     else: 
         parser.print_help()
         return
@@ -61,14 +74,16 @@ def main():
     parser.add_argument("--version", action="version", version="Python Calculator Project 1.0")
     parser.add_argument("--menu", action="store_true", help="Menu Mode for Calculator")
 
-    parser.add_argument("--add", action="store_true", help="Choose add mode for Calculator")
-    parser.add_argument("--sub", action="store_true", help="Choose sub mode for Calculator")
-    parser.add_argument("--multiply", action="store_true", help="Choose multiply mode for Calculator")
-    parser.add_argument("--division", action="store_true", help="Choose division mode for Calculator")
+    parser.add_argument("-a", "--add", action="store_true", help="Choose add mode for Calculator")
+    parser.add_argument("-s", "--sub", action="store_true", help="Choose sub mode for Calculator")
+    parser.add_argument("-m", "--multiply", action="store_true", help="Choose multiply mode for Calculator")
+    parser.add_argument("-d", "--division", action="store_true", help="Choose division mode for Calculator")
+
+    parser.add_argument("--histories", action="store_true", help="Show Calculator Histories")
+    parser.add_argument("--clear", action="store_true", help="Clear Calculator Histories")
 
     parser.add_argument("value1", type=int, nargs="?", help="First value for calculation")
     parser.add_argument("value2", type=int, nargs="?", help="Second value for calculation")
-
 
     args = parser.parse_args()
 
@@ -78,9 +93,6 @@ def main():
         menu_mode(histories)
     else:
         interactive_mode(args, parser, histories)
-
-    
-        
 
 if __name__ == "__main__":
     main()

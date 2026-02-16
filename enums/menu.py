@@ -6,4 +6,5 @@ class Menu(Enum):
   MUL = 3
   DIV = 4
   HISTORY = 5
-  EXIT = 6
+  CLEAR = 6
+  EXIT = 7
