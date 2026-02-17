@@ -1,11 +1,12 @@
+from importlib import resources
 import json
 
-FILE = 'numerra/data/histories.json'
+FILE = 'histories.json'
 
 def push_data(data):
-  with open(FILE, 'w') as file:
+  with resources.files('numerra.data').joinpath(FILE).open('w') as file:
     json.dump(data, file, indent=2)
 
 def show_data():
-  with open(FILE, 'r') as file:
+  with resources.files('numerra.data').joinpath(FILE).open('r') as file:
     return json.load(file)
